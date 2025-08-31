@@ -10,11 +10,11 @@
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
-      background-color: #fff5f5;
-      color: #333;
+      background-color: #ffffff; /* White background for clarity */
+      color: #222; /* Dark text for visibility */
     }
     header {
-      background-color: #b3002d; /* IDFC FIRST Bank deep red */
+      background-color: #9D1D24; /* IDFC FIRST Bank red */
       color: white;
       padding: 1rem 2rem;
       display: flex;
@@ -22,9 +22,14 @@
       align-items: center;
       box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     }
+    header img {
+      height: 40px;
+    }
     header h1 {
       margin: 0;
       font-size: 1.5rem;
+      flex: 1;
+      text-align: center;
     }
     header .rm-name {
       font-size: 1rem;
@@ -42,39 +47,29 @@
       background: #fff;
       border-radius: 12px;
       padding: 1rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      border-left: 6px solid #e63946; /* lighter red accent */
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      border-left: 6px solid #9D1D24; /* accent */
     }
     .card h3 {
       margin-top: 0;
-      color: #b3002d;
+      color: #9D1D24;
     }
-    .drawer {
+    .drawer, .notifications, .funnel, .analytics, .network, .settings {
       margin-top: 2rem;
       background: #fff;
       border-radius: 12px;
       padding: 1.5rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
-    .drawer h2 {
+    .drawer h2, .notifications h2, .funnel h2, .analytics h2, .network h2, .settings h2 {
       margin-top: 0;
-      color: #b3002d;
-    }
-    .notifications, .funnel, .analytics, .network, .settings {
-      margin-top: 2rem;
-      background: #fff;
-      border-radius: 12px;
-      padding: 1.5rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    h2 {
-      color: #b3002d;
+      color: #9D1D24;
     }
     canvas {
       max-width: 100%;
     }
     button {
-      background-color: #b3002d;
+      background-color: #9D1D24;
       color: white;
       border: none;
       border-radius: 8px;
@@ -82,28 +77,30 @@
       cursor: pointer;
     }
     button:hover {
-      background-color: #e63946;
+      background-color: #b42a33;
     }
   </style>
 </head>
 <body>
   <header>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/1/1f/IDFC_FIRST_Bank_logo.png" alt="IDFC FIRST Bank Logo">
     <h1>Executive Circle RM Dashboard</h1>
-    <div class="rm-name">Relationship Manager: Priya Sharma</div>
+    <div class="rm-name">RM: Priya Sharma</div>
   </header>
+
   <div class="container">
     <section class="cards">
       <div class="card">
         <h3>Client Health</h3>
-        <p>80% of clients in good standing.</p>
+        <p><strong>80%</strong> of clients in good standing.</p>
       </div>
       <div class="card">
         <h3>Portfolio Growth</h3>
-        <p>+12% YoY growth</p>
+        <p><strong>+12%</strong> YoY growth</p>
       </div>
       <div class="card">
         <h3>Engagement</h3>
-        <p>65% active clients this quarter</p>
+        <p><strong>65%</strong> active clients this quarter</p>
       </div>
     </section>
 
@@ -115,8 +112,8 @@
     <section class="notifications">
       <h2>Notifications</h2>
       <ul>
-        <li>Follow-up meeting with Mr. Rao tomorrow</li>
-        <li>KYC pending for 2 clients</li>
+        <li>📅 Follow-up meeting with Mr. Rao tomorrow</li>
+        <li>⚠️ KYC pending for 2 clients</li>
       </ul>
     </section>
 
@@ -149,7 +146,7 @@
         labels: ['Good', 'Average', 'At Risk'],
         datasets: [{
           data: [60, 25, 15],
-          backgroundColor: ['#b3002d', '#e63946', '#ffb3c1']
+          backgroundColor: ['#9D1D24', '#b42a33', '#ffb3c1']
         }]
       }
     });
@@ -162,7 +159,7 @@
         datasets: [{
           label: 'Clients',
           data: [50, 30, 20],
-          backgroundColor: ['#b3002d', '#e63946', '#ffb3c1']
+          backgroundColor: ['#9D1D24', '#b42a33', '#ffb3c1']
         }]
       }
     });
@@ -175,8 +172,10 @@
         datasets: [{
           label: 'Growth %',
           data: [2, 4, 6, 5, 7],
-          borderColor: '#b3002d',
-          backgroundColor: '#ffb3c1'
+          borderColor: '#9D1D24',
+          backgroundColor: '#ffb3c1',
+          tension: 0.3,
+          fill: true
         }]
       }
     });
