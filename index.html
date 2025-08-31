@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>IDFC FIRST Bank – Executive Circle RM Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary-red: #DC2626;
+      --dark-red: #B91C1C;
+      --light-gray: #F9FAFB;
+      --dark-gray: #374151;
+      --medium-gray: #6B7280;
+      --success-green: #059669;
+      --warning-orange: #D97706;
+      --border-gray: #E5E7EB;
+      --white: #FFFFFF;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Inter',sans-serif; background:var(--light-gray); color:var(--dark-gray); }
+    .sidebar { position:fixed; top:0; left:0; width:280px; height:100vh; background:linear-gradient(135deg,var(--primary-red),var(--dark-red)); color:white; overflow-y:auto; }
+    .sidebar-header { padding:25px 20px; border-bottom:1px solid rgba(255,255,255,0.2); text-align:center; }
+    .logo { font-size:22px; font-weight:700; }
+    .logo i { margin-right:8px; }
+    .nav-menu { padding:20px 0; }
+    .nav-item { padding:12px 20px; display:flex; align-items:center; gap:12px; cursor:pointer; transition:all .3s ease; border-left:3px solid transparent; }
+    .nav-item:hover,.nav-item.active { background:rgba(255,255,255,0.1); border-left-color:white; }
+    .main-content { margin-left:280px; }
+    .top-header { background:white; padding:20px 30px; box-shadow:0 2px 4px rgba(0,0,0,.1); display:flex; justify-content:space-between; align-items:center; }
+    .header-title { font-size:24px; font-weight:700; }
+    .header-subtitle { font-size:14px; color:var(--primary-red); }
+    .header-actions { display:flex; align-items:center; gap:20px; }
+    .notification-badge { position:relative; cursor:pointer; }
+    .notification-badge .badge { position:absolute; top:-8px; right:-8px; background:var(--primary-red); color:white; border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center; font-size:12px; }
+    .user-profile { display:flex; align-items:center; gap:12px; cursor:pointer; }
+    .user-avatar { width:40px; height:40px; background:var(--primary-red); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:600; }
+    .dashboard-content { padding:30px; }
+    .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:25px; margin-bottom:30px; }
+    .stat-card { background:white; padding:25px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.1); transition:all .3s ease; }
+    .stat-card:hover { transform:translateY(-2px); box-shadow:0 4px 12px rgba(0,0,0,.15); }
+    .stat-icon { font-size:24px; margin-bottom:12px; }
+    .stat-number { font-size:28px; font-weight:800; }
+    .stat-label { font-size:14px; color:var(--medium-gray); }
+    .stat-change { font-size:12px; margin-top:8px; display:flex; align-items:center; gap:6px; }
+    .stat-change.positive { color:var(--success-green); }
+    .stat-change.negative { color:var(--primary-red); }
+    .dashboard-grid { display:grid; grid-template-columns:2fr 1fr; gap:30px; }
+    .clients-section,.alerts-section { background:white; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.1); overflow:hidden; }
+    .section-header { padding:20px; border-bottom:1px solid var(--border-gray); display:flex; justify-content:space-between; align-items:center; }
+    .section-title { font-size:18px; font-weight:600; }
+    .filter-tabs { display:flex; gap:10px; }
+    .filter-tab { padding:6px 12px; border:1px solid var(--border-gray); border-radius:20px; cursor:pointer; }
+    .filter-tab.active { background:var(--primary-red); color:white; border-color:var(--primary-red); }
+    .client-list { max-height:600px; overflow-y:auto; }
+    .client-card { padding:18px 20px; border-bottom:1px solid var(--border-gray); transition:all .3s ease; }
+    .client-card:hover { background:var(--light-gray); }
+    .client-header { display:flex; justify-content:space-between; align-items:flex-start; }
+    .client-info { display:flex; gap:12px; }
+    .client-avatar { width:50px; height:50px; border-radius:50%; background:var(--primary-red); color:white; display:flex; align-items:center; justify-content:center; font-weight:600; font-size:18px; }
+    .client-details h4 { font-size:16px; font-weight:600; }
+    .client-company { font-size:14px; color:var(--medium-gray); margin:4px 0; }
+    .client-metrics { display:flex; gap:16px; font-size:12px; color:var(--medium-gray); }
+    .health-score { display:flex; align-items:center; gap:8px; font-size:12px; }
+    .health-badge { padding:3px 8px; border-radius:12px; font-weight:600; }
+    .health-badge.excellent { background:#D1FAE5; color:var(--success-green); }
+    .health-badge.good { background:#FEF3C7; color:var(--warning-orange); }
+    .health-badge.attention { background:#FEE2E2; color:var(--danger-red); }
+    .alert-indicators { display:flex; gap:6px; margin-top:6px; }
+    .alert-dot { width:8px; height:8px; border-radius:50%; }
+    .alert-dot.green { background:var(--success-green); }
+    .alert-dot.yellow { background:var(--warning-orange); }
+    .alert-dot.red { background:var(--danger-red); }
+    .next-action { background:var(--warning-orange); color:white; padding:6px 12px; border-radius:8px; display:flex; align-items:center; justify-content:space-between; font-size:12px; margin-top:10px; }
+    .next-action .action-text { flex:1; margin-right:8px; }
+    .next-action button { background:white; color:var(--warning-orange); border:none; padding:4px 8px; border-radius:6px; font-size:12px; cursor:pointer; }
+
+    .alerts-section .alert-item { padding:18px 20px; border-bottom:1px solid var(--border-gray); transition:all .3s ease; }
+    .alerts-section .alert-item:hover { background:var(--light-gray); }
+    .alerts-section .alert-item:last-child { border:none; }
+    .alert-header { display:flex; justify-content:space-between; font-size:12px; }
+    .alert-type { padding:2px 6px; border-radius:8px; font-size:11px; text-transform:uppercase; }
+    .alert-type.urgent { background:var(--light-red); color:var(--primary-red); }
+    .alert-type.opportunity { background:#DBEAFE; color:var(--accent-blue); }
+    .alert-type.info { background:#F3F4F6; color:var(--medium-gray); }
+    .alert-time { color:var(--medium-gray); }
+    .alert-message { margin:6px 0; font-size:14px; }
+    .action-buttons { margin-top:10px; display:flex; gap:8px; }
+    .btn { padding:6px 12px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer; }
+    .btn-primary { background:var(--primary-red); color:white; border:none; }
+    .btn-secondary { background:var(--light-gray); color:var(--medium-gray); border:1px solid var(--border-gray); }
+    .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); }
+    .modal-content { background:white; margin:5% auto; border-radius:12px; width:80%; max-width:700px; max-height:80vh; overflow:auto; }
+    .modal-header { padding:20px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-gray); }
+    .modal-title { font-size:20px; font-weight:600; }
+    .close { cursor:pointer; font-size:20px; }
+    .modal-body { padding:20px; }
+    .modal-body p { margin:8px 0; font-size:14px; }
+    .copyable { cursor:pointer; }
+    .copy-notification { position:fixed; top:20px; right:20px; background:var(--success-green); color:white; padding:10px 20px; border-radius:8px; display:none; }
+    @media(max-width:768px){.stats-grid{grid-template-columns:1fr 1fr;} .dashboard-grid{grid-template-columns:1fr;} .sidebar{width:60px;} .sidebar .nav-item span{display:none;} .main-content{margin-left:60px;}}
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo"><i class="fas fa-university"></i>IDFC FIRST Bank</div>
+    </div>
+    <div class="nav-menu">
+      <div class="nav-item active"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></div>
+      <div class="nav-item"><i class="fas fa-users"></i><span>My Clients</span></div>
+      <div class="nav-item"><i class="fas fa-bell"></i><span>Alerts</span></div>
+    </div>
+  </div>
+  <div class="main-content">
+    <div class="top-header">
+      <div>
+        <div class="header-title">Executive Circle Dashboard</div>
+        <div class="header-subtitle">Empowering RMs with AI-Driven Insights</div>
+      </div>
+      <div class="header-actions">
+        <div class="notification-badge"><i class="fas fa-bell"></i><span class="badge">5</span></div>
+        <div class="user-profile"><div class="user-avatar">RM</div>Rajesh Mehta</div>
+      </div>
+    </div>
+    <div class="dashboard-content">
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-icon"><i class="fas fa-user-tie"></i></div><div class="stat-number">42</div><div class="stat-label">CXO Clients</div><div class="stat-change positive"><i class="fas fa-arrow-up"></i>+3 MoM</div></div>
+        <div class="stat-card"><div class="stat-icon"><i class="fas fa-users"></i></div><div class="stat-number">134</div><div class="stat-label">Family Members</div><div class="stat-change positive"><i class="fas fa-arrow-up"></i>+8 MoM</div></div>
+        <div class="stat-card"><div class="stat-icon"><i class="fas fa-chart-line"></i></div><div class="stat-number">₹125Cr</div><div class="stat-label">Total AUM</div><div class="stat-change positive"><i class="fas fa-arrow-up"></i>+12%</div></div>
+        <div class="stat-card"><div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div><div class="stat-number">5</div><div class="stat-label">Active Alerts</div><div class="stat-change negative"><i class="fas fa-arrow-down"></i>-2</div></div>
+      </div>
+      <div class="dashboard-grid">
+        <div class="clients-section">
+          <div class="section-header"><div class="section-title">My CXO Clients</div><div class="filter-tabs"><div class="filter-tab active">All</div><div class="filter-tab">Priority</div><div class="filter-tab">Attention</div></div></div>
+          <div class="client-list">
+            <div class="client-card" onclick="openClient('arjun')">
+              <div class="client-header">
+                <div class="client-info"><div class="client-avatar">AS</div><div><h4>Arjun Sharma</h4><div class="client-company">CEO, TechVista</div></div></div>
+                <div class="health-score"><div class="health-badge excellent">Excellent</div>92/100</div>
+              </div>
+              <div class="alert-indicators"><div class="alert-dot green"></div><div class="alert-dot green"></div><div class="alert-dot yellow"></div></div>
+              <div class="next-action"><span class="action-text">Next: Schedule portfolio review</span><button>Schedule</button></div>
+            </div>
+            <!-- Repeat for other clients -->
+          </div>
+        </div>
+        <div class="alerts-section">
+          <div class="section-header"><div class="section-title">Priority Alerts</div></div>
+          <div class="alert-item">
+            <div class="alert-header"><div class="alert-type urgent">Urgent</div><div class="alert-time">2h ago</div></div>
+            <div class="alert-message">Home loan EMI overdue</div><div class="alert-client">Priya Patel</div>
+            <div class="action-buttons"><button class="btn-primary">Call</button><button class="btn-secondary">Remind</button></div>
+          </div>
+          <!-- Repeat alerts -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="clientModal"><div class="modal-content"><div class="modal-header"><div class="modal-title" id="modalTitle">Client</div><span class="close" onclick="closeModal()">&times;</span></div><div class="modal-body" id="modalBody"></div></div></div>
+  <div class="copy-notification" id="copyNotification">✅ Copied!</div>
+  <script>
+    const data={ 'arjun': {name:'Arjun Sharma',company:'TechVista',aum:'₹3.2Cr',score:92} };
+    function openClient(id){
+      const c=data[id]; if(!c)return;
+      document.getElementById('modalTitle').textContent=c.name+' Profile';
+      document.getElementById('modalBody').innerHTML=`<p><strong>Company:</strong> ${c.company}</p><p><strong>AUM:</strong> ${c.aum}</p><p><strong>Health:</strong> ${c.score}/100</p>`;
+      document.getElementById('clientModal').style.display='block';
+    }
+    function closeModal(){document.getElementById('clientModal').style.display='none';}
+    document.querySelectorAll('.copyable').forEach(el=>el.onclick=e=>{
+      navigator.clipboard.writeText(el.dataset.copy||el.textContent);
+      const n=document.getElementById('copyNotification');n.style.display='block';setTimeout(()=>n.style.display='none',2000);
+    });
+  </script>
+</body>
+</html>
